@@ -3,7 +3,7 @@
 
 ## description
 
-Plasma-Mobile of Manjaro Linux for the Pinephone
+Plasma-Mobile of Manjaro Linux for the OnePlus6T
 
 ## where can I download an iso?
 

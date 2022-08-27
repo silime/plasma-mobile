@@ -21,7 +21,7 @@ jobs:
         id: release
         uses: actions/create-release@v1.1.4
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }}
         with:
           tag_name: ${{ steps.time.outputs.time }}
           release_name: Release ${{ steps.time.outputs.time }}
@@ -36,7 +36,7 @@ jobs:
     needs: prepare_release
     strategy:
       matrix:
-        DEVICE: [pinephone,pinephonepro]
+        DEVICE: [fajita]
         EDITION: [plasma-mobile]
         BRANCH: [unstable]
     steps:
@@ -51,9 +51,9 @@ jobs:
           format: 'YYYYMMDD'
       - 
         id: image-build
-        uses: manjaro-arm/rootfs@master
+        uses: silime/phosh@master
         with:
-          arm-profiles-repo: https://github.com/manjaro-pinephone/arm-profiles
+          arm-profiles-repo: https://github.com/silime/arm-profiles
           device: ${{ matrix.device }}
           edition: ${{ matrix.edition }}
           branch: ${{ matrix.branch }}
@@ -65,7 +65,7 @@ jobs:
         id: upload_release 
         uses: actions/upload-release-asset@v1.0.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }}
         with:
           upload_url: ${{ needs.prepare_release.outputs.upload_url }}
           asset_path: ./${{ env.FILE_PATH }}
@@ -75,7 +75,7 @@ jobs:
         id: upload_sha1
         uses: actions/upload-release-asset@v1.0.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }}
         with:
           upload_url: ${{ needs.prepare_release.outputs.upload_url }}
           asset_path: ./${{ env.FILE_SHA1 }}
@@ -85,7 +85,7 @@ jobs:
         id: upload_pkg
         uses: actions/upload-release-asset@v1.0.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }}
         with:
           upload_url: ${{ needs.prepare_release.outputs.upload_url }}
           asset_path: ./${{ env.FILE_PKG }}
@@ -98,4 +98,4 @@ jobs:
         with:
           release_id: ${{ needs.prepare_release.outputs.release_id }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BUILD_TOKEN }}
